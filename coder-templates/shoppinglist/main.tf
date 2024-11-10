@@ -237,4 +237,5 @@ module "dotfiles" {
   version              = "1.0.18"
   agent_id             = coder_agent.main.id
   default_dotfiles_uri = "https://github.com/kmjayadeep/homelab-coder-config"
+  manual_update        = true
 }
