@@ -9,6 +9,7 @@ RUN apt-get update \
 	wget \
   zsh \
   make \
+  gcc \
   gnome-keyring \
   dbus-x11 \
   libsecret-tools
@@ -23,6 +24,9 @@ RUN npm install -g near-cli-rs@latest
 # Cargo
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/root/.cargo/bin:$PATH"
+
+# cargo-near
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/near/cargo-near/releases/latest/download/cargo-near-installer.sh | sh
 
 ARG USER=coder
 RUN useradd --groups sudo --no-create-home --shell /bin/bash ${USER} \
