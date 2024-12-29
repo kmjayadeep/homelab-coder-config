@@ -20,6 +20,10 @@ RUN apt-get install -y nodejs
 # Near cli
 RUN npm install -g near-cli-rs@latest
 
+# Cargo
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:$PATH"
+
 ARG USER=coder
 RUN useradd --groups sudo --no-create-home --shell /bin/bash ${USER} \
 	&& echo "${USER} ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/${USER} \
