@@ -12,6 +12,7 @@ RUN apt-get update \
   gcc \
   gnome-keyring \
   dbus-x11 \
+  pass \
   libsecret-tools
 
 # Install node and npm
