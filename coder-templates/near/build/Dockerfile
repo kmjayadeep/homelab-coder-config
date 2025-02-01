@@ -13,7 +13,10 @@ RUN apt-get update \
   gnome-keyring \
   dbus-x11 \
   pass \
-  libsecret-tools
+  libsecret-tools \
+  pkg-config \
+  libssl-dev \
+  libudev-dev
 
 # Install node and npm
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
