@@ -16,7 +16,8 @@ RUN apt-get update \
   libsecret-tools \
   pkg-config \
   libssl-dev \
-  libudev-dev
+  libudev-dev \
+  g++
 
 # Install node and npm
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
