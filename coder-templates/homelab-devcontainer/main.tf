@@ -343,3 +343,10 @@ resource "coder_metadata" "container_info" {
     value = var.cache_repo == "" ? "not enabled" : var.cache_repo
   }
 }
+
+module "git-commit-signing" {
+  count    = data.coder_workspace.me.start_count
+  source   = "registry.coder.com/modules/git-commit-signing/coder"
+  version  = "1.0.11"
+  agent_id = coder_agent.main.id
+}
