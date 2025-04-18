@@ -1,0 +1,22 @@
+data.location=/psuite/psuite-todo
+
+context.nowork.read=project.isnt:work
+context.work.read=project:work
+context.work.write=project:work
+report.backlog.columns=id,priority,project,tags,scheduled,scheduled.relative,description.count,due.relative
+report.backlog.description=Tasks in backlog by project
+report.backlog.filter=project.any: status:pending
+report.backlog.labels=ID,P,Project,Tag,Schedule,S,Description,Due
+report.backlog.sort=project+/,scheduled+
+report.today.columns=id,priority,project,tags,description.count,due.relative
+report.today.description=Today's tasks
+report.today.filter=(end.after:today status:completed) or (scheduled.before:tomorrow status:pending) or (start.any: status.not:completed status.not:deleted)
+report.today.labels=ID,P,Project,Tag,Description,Due
+report.today.sort=status-/,due+,project+,scheduled+
+report.in.columns=id,description
+report.in.description=Inbox
+report.in.filter=project.none: status:pending
+report.in.labels=ID,Description
+uda.priority.values=H,L,
+urgency.uda.priority.H.coefficient=6.0
+urgency.uda.priority.L.coefficient=-6.0
