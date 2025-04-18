@@ -73,9 +73,9 @@ resource "coder_agent" "main" {
   }
 
   metadata {
-    display_name = "Home Disk"
-    key          = "3_home_disk"
-    script       = "coder stat disk --path $${HOME}"
+    display_name = "Psuite Disk"
+    key          = "3_psuite_disk"
+    script       = "coder stat disk --path /psuite"
     interval     = 60
     timeout      = 1
   }
@@ -122,7 +122,7 @@ resource "coder_app" "code-server" {
   agent_id     = coder_agent.main.id
   slug         = "code-server"
   display_name = "code-server"
-  url          = "http://localhost:13337/?folder=/home/${local.username}"
+  url          = "http://localhost:13337/?folder=/psuite"
   icon         = "/icon/code.svg"
   subdomain    = false
   share        = "owner"
@@ -134,8 +134,8 @@ resource "coder_app" "code-server" {
   }
 }
 
-resource "docker_volume" "home_volume" {
-  name = "coder-${data.coder_workspace.me.id}-home"
+resource "docker_volume" "nix_volume" {
+  name = "coder-${data.coder_workspace.me.id}-nix"
   # Protect the volume from being deleted due to changes in attributes.
   lifecycle {
     ignore_changes = all
@@ -219,14 +219,18 @@ resource "docker_container" "workspace" {
   hostname = data.coder_workspace.me.name
   # Use the docker gateway if the access URL is 127.0.0.1
   entrypoint = ["sh", "-c", replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")]
-  env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}"]
+  env        = [
+    "TZ=Europe/Zurich",
+    "CODER_TEMPLATE=psuite",
+    "CODER_AGENT_TOKEN=${coder_agent.main.token}"
+  ]
   host {
     host = "host.docker.internal"
     ip   = "host-gateway"
   }
   volumes {
-    container_path = "/home/${local.username}"
-    volume_name    = docker_volume.home_volume.name
+    container_path = "/nix"
+    volume_name    = docker_volume.nix_volume.name
     read_only      = false
   }
   volumes {
@@ -262,7 +266,7 @@ module "dotfiles" {
   manual_update        = true
 }
 
-# Enable commit sign using
+# Enable commit sign using ssh key
 module "git-commit-signing" {
   count    = data.coder_workspace.me.start_count
   source   = "registry.coder.com/modules/git-commit-signing/coder"
