@@ -20,3 +20,5 @@ report.in.labels=ID,Description
 uda.priority.values=H,L,
 urgency.uda.priority.H.coefficient=6.0
 urgency.uda.priority.L.coefficient=-6.0
+
+news.version=3.4.1
