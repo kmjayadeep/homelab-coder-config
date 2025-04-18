@@ -38,12 +38,12 @@ data "coder_parameter" "repo" {
   option {
     name        = "homelab-k8s"
     description = "Gitops for homelab k8s"
-    value       = "https://github.com/kmjayadeep/homelab-k8s"
+    value       = "git@github.com:kmjayadeep/homelab-k8s.git"
   }
   option {
     name        = "homelab-iac"
     description = "IAC for homelab infra"
-    value       = "https://github.com/kmjayadeep/homelab-iac"
+    value       = "git@github.com:kmjayadeep/homelab-iac.git"
   }
   option {
     name        = "Custom"
@@ -125,6 +125,7 @@ locals {
     "ENVBUILDER_DOCKER_CONFIG_BASE64" : try(data.local_sensitive_file.cache_repo_dockerconfigjson[0].content_base64, ""),
     "ENVBUILDER_PUSH_IMAGE" : var.cache_repo == "" ? "" : "true",
     "ENVBUILDER_INSECURE" : "${var.insecure_cache_repo}",
+    "ENVBUILDER_GIT_SSH_PRIVATE_KEY_BASE64": base64encode(data.coder_workspace_owner.me.ssh_private_key),
   }
   # Convert the above map to the format expected by the docker provider.
   docker_env = [
