@@ -23,15 +23,17 @@ RUN groupadd --gid ${GID} ${GROUP} && useradd --uid ${UID} --gid ${GID} --groups
 	&& echo "${USER} ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/${USER} \
 	&& chmod 0440 /etc/sudoers.d/${USER}
 
-USER ${USER}
-
 # Install nix
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
   sh -s -- install linux --init none --no-confirm --extra-conf "trusted-users = ${USER}"
 
-# Install devenv
-RUN nix-env --install --attr devenv -f https://github.com/NixOS/nixpkgs/tarball/nixpkgs-unstable
+ENV PATH="${PATH}:/nix/var/nix/profiles/default/bin"
 
-RUN sudo chown -R $USER:$GROUP /nix
+# Install devenv
+RUN nix-env -f "<nixpkgs>" -iA devenv
+
+USER ${USER}
+
+RUN devenv
 
 WORKDIR /home/${USER}
