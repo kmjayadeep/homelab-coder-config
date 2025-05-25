@@ -9,7 +9,8 @@ RUN apt-get update \
 	wget \
   zsh \
   make \
-  jq
+  jq \
+  direnv
 
 ARG USER=jayadeep
 ARG GROUP=jayadeep
@@ -24,8 +25,12 @@ RUN groupadd --gid ${GID} ${GROUP} && useradd --uid ${UID} --gid ${GID} --groups
 
 USER ${USER}
 
+# Install nix
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | \
   sh -s -- install linux --init none --no-confirm --extra-conf "trusted-users = ${USER}"
+
+# Install devenv
+RUN nix-env --install --attr devenv -f https://github.com/NixOS/nixpkgs/tarball/nixpkgs-unstable
 
 RUN sudo chown -R $USER:$GROUP /nix
 
