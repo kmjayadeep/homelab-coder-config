@@ -9,3 +9,6 @@ cp dotfiles/zshrc ~/.zshrc
 nix-env -f "<nixpkgs>" -iA taskwarrior3
 mkdir -p ~/.config/task
 cp dotfiles/taskrc ~/.config/task/taskrc
+
+# Devenv
+nix-env -f "<nixpkgs>" -iA devenv

@@ -19,7 +19,7 @@ ARG GID=1000
 
 RUN userdel ubuntu
 
-RUN groupadd --gid ${GID} ${GROUP} && useradd --uid ${UID} --gid ${GID} --groups sudo --no-create-home --shell /bin/zsh ${USER} \
+RUN groupadd --gid ${GID} ${GROUP} && useradd --uid ${UID} --gid ${GID} --groups sudo --shell /bin/zsh ${USER} \
 	&& echo "${USER} ALL=(ALL) NOPASSWD:ALL" >/etc/sudoers.d/${USER} \
 	&& chmod 0440 /etc/sudoers.d/${USER}
 
@@ -29,11 +29,8 @@ RUN curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/
 
 ENV PATH="${PATH}:/nix/var/nix/profiles/default/bin"
 
-# Install devenv
-RUN nix-env -f "<nixpkgs>" -iA devenv
-
 USER ${USER}
 
-RUN devenv
+RUN sudo chown -R $USER:$GROUP /nix
 
 WORKDIR /home/${USER}
